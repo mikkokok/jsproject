@@ -32,6 +32,16 @@ function startGame() {
 				options: ['2', '3', '4', '5'], 
 				correct: ['4'] 
 			}, // second question object ends
+			{ 
+				question: '3+3', 
+				options: ['2', '3', '4', '6'], 
+				correct: ['6'] 
+			}, // third question object ends
+			{ 
+				question: '4+4', 
+				options: ['2', '3', '4', '8'], 
+				correct: ['8'] 
+			}, // third question object ends
 		],
 		theme: 'normal',
 		

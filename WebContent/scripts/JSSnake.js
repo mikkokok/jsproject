@@ -125,16 +125,16 @@ JSSnake.prototype.startGame = function() {
 	} // paint_options
 
 	// Function to paint question
-	function paint_question () {
+	function paint_question(question) {
 		qctx.clearRect(0, 0, 1400, 60); // x,y, width, height // clears the old question before painting new
 		qctx.fillStyle = "red";
 	    qctx.font = "30px 'Comic Sans MS'";
 	    qctx.textAlign = "left";
-	    qctx.fillText("Question: 2+2 ", 10, 50);	
+	    qctx.fillText("Question: "+question, 10, 50);	
 	} // paint_question
 	
     // Function to paint amount of lifes
-    function paint_lifes () {
+    function paint_lifes() {
     	lctx.clearRect(0, 0, 1400, 60); // x,y, width, height // clears the old life number
     	lctx.fillStyle = "red";
     	lctx.font = "30px 'Comic Sans MS'";
@@ -143,9 +143,11 @@ JSSnake.prototype.startGame = function() {
     } // paint_life
     	
 	// Function to end game 
-	function end_game () {
+	function end_game (text) {
 		ctx.fillStyle = 'red';
-		ctx.fillText("Game ended", w, h); // text, x, y
+		ctx.font = "30px 'Comic Sans MS'";
+		ctx.textAlign = "left";
+		ctx.fillText(text, 140, 70); // text, x, y
 		
 	} // end_game
 	
@@ -175,6 +177,9 @@ JSSnake.prototype.startGame = function() {
 	var snakeY;		// y-cordinate for snake
 	var interval = 80; // defines game speed, smaller number is faster
 	var growinterval = 25; // defines how often snake will grow 
+	var correctanswer;  // variable for answer
+	var questiona; // first variable for question
+	var questionb; // second variable for question
 	
 	
 	
@@ -214,13 +219,13 @@ JSSnake.prototype.startGame = function() {
 		} // outer for
 	}
 	// Function to create options
-	function create_options () {
+	function create_options() {
 		// Create four different options to get four options for collecting
-		
+		do_the_math(); // first calculate question and answer
 		optiona = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1,
-				answer: 4,
+				answer: correctanswer,
 				
 			} // optiona
 		// Check that option is not created on top of snake and if it is then re-create it
@@ -236,7 +241,7 @@ JSSnake.prototype.startGame = function() {
 		optionb = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1,
-				answer: Math.round(Math.random()*20)+1,
+				answer: Math.round(Math.random()*200)+1,
 				
 			} // optionb
 		if (optionb.answer == optiona.answer) {
@@ -256,7 +261,7 @@ JSSnake.prototype.startGame = function() {
 		optionc = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1,
-				answer: Math.round(Math.random()*20)+1,
+				answer: Math.round(Math.random()*200)+1,
 			} // optionc
 		if (optionc.answer == optiona.answer) {
 	       	 optionc.answer = Math.round(Math.random()*20)+1;
@@ -274,7 +279,7 @@ JSSnake.prototype.startGame = function() {
 		optiond = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1, 
-				answer: Math.round(Math.random()*20)+1,
+				answer: Math.round(Math.random()*200)+1,
 			} // optiond
 		if (optiond.answer == optiona.answer) {
 	       	 optiond.answer = Math.round(Math.random()*20)+1;
@@ -290,6 +295,14 @@ JSSnake.prototype.startGame = function() {
             } //if
 		} // for
 	} // create_options
+	
+	// Function to create the question and correct answer
+	function do_the_math() {
+		questiona = Math.round(Math.random()*200)+1;
+		questionb = Math.round(Math.random()*200)+1
+		correctanswer = questiona+questionb;
+		paint_question(questiona+" + "+questionb);
+	}
 	
 	// ######################### End of help functions #########################
 	
@@ -315,13 +328,13 @@ JSSnake.prototype.startGame = function() {
 		else if(direction == "down") snakeY++;
 		
 		// Check if snake collides with itself or with the borders and then reduce lifes or stop the game
-		if(snakeX == -1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize || self.lifes == 0 || check_collision(snakeX, snakeY, snake)) {
+		if(snakeX == 1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize || self.lifes == 0 || check_collision(snakeX, snakeY, snake)) {
 			self.lifes--; // reduce the amount of lifes on collision
+			
 			// if lifes are down to zero then clear game area
 		if ( self.lifes <= 0  ) {
-			ctx.clearRect (0, 0, w, h);
+			end_game("Game ended, you lost!");
 			gameloop = clearInterval(gameloop);
-			alert("Game over!");
 			return;
 		} // else-if
 			return;
@@ -331,19 +344,18 @@ JSSnake.prototype.startGame = function() {
 			self.lifes--;
 			create_options();
 		} // if
-		if (snake.length <= 1) {
-			ctx.clearRect (0, 0, w, h);
+		if (snake.length <= 1 || score == 4) {
+			end_game("Game ended, you won!");
 			gameloop = clearInterval(gameloop);
-			alert("You win!");
 			return;
 		}
 		
 		// few lines for debugging
-		//console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y+" snake.length: "+snake.length);
+		console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y+" snake.length: "+snake.length);
 		
 		// Check if the snake eats the correct option
-		//if(snakeX == optiona.x && snakeY == optiona.y) {
 		if(check_option_collision(snakeX, snakeY, optiona.x, optiona.y)) {
+			score++;
 			tail = {
 					x: snakeX, 
 					y: snakeY 
@@ -373,7 +385,6 @@ JSSnake.prototype.startGame = function() {
 		
 		// Lets make the snake to grow automatically
 		growinterval--;
-		console.log(growinterval);
 		if (growinterval <= 0) {
 			growinterval = 25
 			snake.push({x: 0,
