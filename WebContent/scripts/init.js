@@ -39,7 +39,8 @@ function startGame() {
 		// Optional configurations
 		// Add as many you need in your game, these are just examples
 		lifes: 6, 			// How many tries?
-		nOfOptions: 4 		// How many options should be visible at the same time
+		nOfOptions: 4, 		// How many options should be visible at the same time
+		//difficulty: easy
 
 	}
 

@@ -23,6 +23,7 @@ JSSnake = function(options) {
 	self.submit = self.options.submit; 
 	self.sendAnswer = self.options.sendAnswer; 
 	self.lifes = self.options.lifes;
+	self.nOfOptions = self.options.nOfOptions;
 
 	// Create a container for the game. 
 	// There needs to be a "gamearea"-container, which is positioned relative and takes the 
@@ -161,6 +162,7 @@ JSSnake.prototype.startGame = function() {
 	// Variables to make things easier
 	var option; 
 	var optionsize = 60; // option size
+	var options = ["a","b","c","d","e","f","g","h"]; // array for options
 	var snake = []; // snake itself created as a array
 	var snakesize = 10; // snake size
 	var tail; 			// snakes tail
@@ -169,8 +171,10 @@ JSSnake.prototype.startGame = function() {
 	var score = 0; // Start from zero
 	var snakeX;		// x-cordinate for snake
 	var snakeY;		// y-cordinate for snake
-	var interval = 120; // defines game speed, smaller number is faster
+	var interval = 200; // defines game speed, smaller number is faster
 	var growinterval = 20; // defines how often snake will grow 
+	
+	
 	
 	// Init function to start the game
 	function init()	{
@@ -200,9 +204,10 @@ JSSnake.prototype.startGame = function() {
 	// Function to create options
 	function create_options () {
 		// Create four different options to get four options for collecting
+		
 		optiona = {
-				x: Math.round(Math.random()*(w-optionsize)/optionsize),
-				y: Math.round(Math.random()*(h-optionsize)/optionsize),
+				x: Math.round(Math.random()*130)+1,
+				y: Math.round(Math.random()*70)+1,
 				
 			} // optiona
 		// Check that option is not created on top of snake and if it is then re-create it
@@ -216,8 +221,8 @@ JSSnake.prototype.startGame = function() {
             } // if
         } // for
 		optionb = {
-				x: Math.round(Math.random()*(w-optionsize)/optionsize), 
-				y: Math.round(Math.random()*(h-optionsize)/optionsize), 
+				x: Math.round(Math.random()*130)+1,
+				y: Math.round(Math.random()*70)+1, 
 			} // optionb
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -230,8 +235,8 @@ JSSnake.prototype.startGame = function() {
             } //if
 		} // for
 		optionc = {
-				x: Math.round(Math.random()*(w-optionsize)/optionsize), 
-				y: Math.round(Math.random()*(h-optionsize)/optionsize), 
+				x: Math.round(Math.random()*130)+1,
+				y: Math.round(Math.random()*70)+1, 
 			} // optionc
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -244,8 +249,8 @@ JSSnake.prototype.startGame = function() {
             } // if
 		} // for
 		optiond = {
-				x: Math.round(Math.random()*(w-optionsize)/optionsize), 
-				y: Math.round(Math.random()*(h-optionsize)/optionsize), 
+				x: Math.round(Math.random()*130)+1,
+				y: Math.round(Math.random()*70)+1, 
 			} // optiond
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -282,18 +287,15 @@ JSSnake.prototype.startGame = function() {
 		else if(direction == "up") snakeY--;
 		else if(direction == "down") snakeY++;
 		
-		// debugging
-		//console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" snakeX == w/snakesize "+w/snakesize+" snakeY == h/snakesize "+h/snakesize);
 		// Check if snake collides with itself or with the borders and then reduce lifes or stop the game
-		if(snakeX == -1 || snakeX == w/snakesize || snakeY == -1 || snakeY == h/snakesize || check_collision(snakeX, snakeY, snake)) {
-			// Restart game if lifes have ended 
-			self.lifes--;
+		if(snakeX == -1 || snakeX == w/snakesize || snakeY == -1 || self.lifes == 0|| snakeY == h/snakesize || check_collision(snakeX, snakeY, snake)) {
+			self.lifes--; // reduce the amount of lifes on collision
 			if ( 0 < self.lifes ) {
 			//gameloop = clearInterval(gameloop);
 				interval = 360; // make game very much slower
 			return;
 			// if lifes are down to zero then clear game area
-		} else if ( 0 == self.lifes ) {
+		} else if ( self.lifes == 0  ) {
 			ctx.clearRect (0, 0, w, h);
 			gameloop = clearInterval(gameloop);
 			return;
@@ -302,8 +304,7 @@ JSSnake.prototype.startGame = function() {
 		} // if
 		
 		// few lines for debugging
-		//console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y);
-		//console.log("optiona.x/snakesize "+optiona.x/snakesize+" optiona.y/snakesize "+optiona.y/snakesize);
+		console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y);
 		
 		// Check if the snake eats the correct option
 		if(snakeX == optiona.x && snakeY == optiona.y) {
@@ -311,20 +312,12 @@ JSSnake.prototype.startGame = function() {
 					x: snakeX, 
 					y: snakeY 
 			};
+			create_options();
 			// Reduce the length of the snake (pop the tail X times)
 			for (var i = 0; i < 2; i++) {
-				tail = snake.pop();	
+				tail = snake.pop();
 			} // for
-			// Stop game if snake length becomes smaller than 1
-			if (snake.length < 1) {
-				console.log("snake is smaller than 1");
-				ctx.clearRect (0, 0, w, h);
-				ctx.fillStyle = 'red';
-				ctx.fillText("Game ended", w, h); // text, x, y
-				gameloop = clearInterval(gameloop);
-			} else { // If tail is long enough create new options
-			create_options();
-			} // else-if
+			tail.x = snakeX; tail.y = snakeY;
 		} else {
 			tail = snake.pop(); // Remove last cell of the array by using pop method
 			tail.x = snakeX; tail.y = snakeY;
