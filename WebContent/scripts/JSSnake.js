@@ -351,7 +351,7 @@ JSSnake.prototype.startGame = function() {
 		}
 		
 		// few lines for debugging
-		console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y+" snake.length: "+snake.length);
+		//console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y+" snake.length: "+snake.length);
 		
 		// Check if the snake eats the correct option
 		if(check_option_collision(snakeX, snakeY, optiona.x, optiona.y)) {
