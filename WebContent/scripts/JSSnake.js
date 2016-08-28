@@ -114,11 +114,14 @@ JSSnake.prototype.startGame = function() {
 	} // paint_snake
 	
 	// Function to paint options
-	function paint_options(x, y) {
+	function paint_options(x, y, answer) {
 		ctx.fillStyle = "green"; // differentiate options from snake and paint it to green
 		ctx.fillRect(x*optionsize, y*optionsize, optionsize, optionsize);
 		ctx.strokeStyle = "white";
 		ctx.strokeRect(x*optionsize, y*optionsize, optionsize, optionsize);
+		ctx.font = "30px 'Comic Sans MS'";
+		ctx.textAlign = "left";
+		ctx.fillText(answer, x*optionsize, y*optionsize);
 	} // paint_options
 
 	// Function to paint question
@@ -127,7 +130,7 @@ JSSnake.prototype.startGame = function() {
 		qctx.fillStyle = "red";
 	    qctx.font = "30px 'Comic Sans MS'";
 	    qctx.textAlign = "left";
-	    qctx.fillText("Question: ", 10, 50);	
+	    qctx.fillText("Question: 2+2 ", 10, 50);	
 	} // paint_question
 	
     // Function to paint amount of lifes
@@ -217,6 +220,7 @@ JSSnake.prototype.startGame = function() {
 		optiona = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1,
+				answer: 4,
 				
 			} // optiona
 		// Check that option is not created on top of snake and if it is then re-create it
@@ -231,7 +235,8 @@ JSSnake.prototype.startGame = function() {
         } // for
 		optionb = {
 				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1, 
+				y: Math.round(Math.random()*70)+1,
+				answer: Math.round(Math.random()*20)+1,
 			} // optionb
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -245,7 +250,8 @@ JSSnake.prototype.startGame = function() {
 		} // for
 		optionc = {
 				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1, 
+				y: Math.round(Math.random()*70)+1,
+				answer: Math.round(Math.random()*20)+1,
 			} // optionc
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -260,6 +266,7 @@ JSSnake.prototype.startGame = function() {
 		optiond = {
 				x: Math.round(Math.random()*130)+1,
 				y: Math.round(Math.random()*70)+1, 
+				answer: Math.round(Math.random()*20)+1,
 			} // optiond
 		// Check that option is not created on top of snake and if it is then re-create it
 		for (var i=0; i>snake.length; i++) {
@@ -342,10 +349,10 @@ JSSnake.prototype.startGame = function() {
 		} // for
 		
 		// Create the four options to the canvas
-		paint_options(optiona.x/6, optiona.y/6);
-		paint_options(optionb.x/6, optionb.y/6);
-		paint_options(optionc.x/6, optionc.y/6);
-		paint_options(optiond.x/6, optiond.y/6);
+		paint_options(optiona.x/6, optiona.y/6, optiona.answer);
+		paint_options(optionb.x/6, optionb.y/6, optionb.answer);
+		paint_options(optionc.x/6, optionc.y/6, optionc.answer);
+		paint_options(optiond.x/6, optiond.y/6, optiond.answer);
 		
 		// Last but not least paint the amount of lifes
 		paint_lifes();
