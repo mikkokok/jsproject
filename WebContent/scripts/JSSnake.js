@@ -136,7 +136,6 @@ JSSnake.prototype.startGame = function() {
     	lctx.fillStyle = "red";
     	lctx.font = "30px 'Comic Sans MS'";
     	lctx.textAlign = "left";
-    	//console.log(self.lifes); // for debugging
     	lctx.fillText("Lifes: "+self.lifes, 10, 50);
     } // paint_life
     	
@@ -171,7 +170,7 @@ JSSnake.prototype.startGame = function() {
 	var score = 0; // Start from zero
 	var snakeX;		// x-cordinate for snake
 	var snakeY;		// y-cordinate for snake
-	var interval = 200; // defines game speed, smaller number is faster
+	var interval = 80; // defines game speed, smaller number is faster
 	var growinterval = 20; // defines how often snake will grow 
 	
 	
@@ -200,6 +199,16 @@ JSSnake.prototype.startGame = function() {
 		for(var i = length-1; i>=0; i--) {
 			snake.push({x: i, y:0}); // Make the snake to move by adding element at the end of array by using the push method
 		}
+	}
+	// Function to check if the snake collides with the option borders
+	function check_option_collision(snakeX, snakeY, optionx, optiony) { 
+		for (var i = 0; i < 7; i++) {
+			for (var j = 0; j < 7; j++) {
+				if (snakeX == (optionx+i) && snakeY == (optiony+j) ) {
+					return true;
+				} // if
+			} // inner for
+		} // outer for
 	}
 	// Function to create options
 	function create_options () {
@@ -288,26 +297,29 @@ JSSnake.prototype.startGame = function() {
 		else if(direction == "down") snakeY++;
 		
 		// Check if snake collides with itself or with the borders and then reduce lifes or stop the game
-		if(snakeX == -1 || snakeX == w/snakesize || snakeY == -1 || self.lifes == 0|| snakeY == h/snakesize || check_collision(snakeX, snakeY, snake)) {
+		if(snakeX == -1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize || self.lifes == 0 || check_collision(snakeX, snakeY, snake)) {
 			self.lifes--; // reduce the amount of lifes on collision
-			if ( 0 < self.lifes ) {
-			//gameloop = clearInterval(gameloop);
-				interval = 360; // make game very much slower
-			return;
 			// if lifes are down to zero then clear game area
-		} else if ( self.lifes == 0  ) {
+		if ( self.lifes <= 0  ) {
 			ctx.clearRect (0, 0, w, h);
 			gameloop = clearInterval(gameloop);
+			alert("Game over!");
 			return;
 		} // else-if
 			return;
+		} // if
+		// Reduce lifes if wrong option is selected
+		if (check_option_collision(snakeX, snakeY, optionb.x, optionb.y) || check_option_collision(snakeX, snakeY, optionc.x, optionc.y) || check_option_collision(snakeX, snakeY, optiond.x, optiond.y)   ) {
+			self.lifes--;
+			create_options();
 		} // if
 		
 		// few lines for debugging
 		console.log("snakeX: "+snakeX+" snakeY: "+snakeY+" optiona.x: "+optiona.x+" optiona.y: "+optiona.y);
 		
 		// Check if the snake eats the correct option
-		if(snakeX == optiona.x && snakeY == optiona.y) {
+		//if(snakeX == optiona.x && snakeY == optiona.y) {
+		if(check_option_collision(snakeX, snakeY, optiona.x, optiona.y)) {
 			tail = {
 					x: snakeX, 
 					y: snakeY 
