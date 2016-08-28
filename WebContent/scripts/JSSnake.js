@@ -328,9 +328,15 @@ JSSnake.prototype.startGame = function() {
 		else if(direction == "down") snakeY++;
 		
 		// Check if snake collides with itself or with the borders and then reduce lifes or stop the game
-		if(snakeX == 1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize || self.lifes == 0 || check_collision(snakeX, snakeY, snake)) {
+		if(snakeX == -1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize || self.lifes == 0 || check_collision(snakeX, snakeY, snake)) {
 			self.lifes--; // reduce the amount of lifes on collision
 			
+			// Make the snake spawn from default location to prevent losing all lifes when colliding with wall
+			if (snakeX == -1 || snakeY == -1 || snakeX == w/snakesize || snakeY == h/snakesize) { 
+				snake[0].x = 1;
+				snake[0].y = 1;
+				direction = "right";
+			}
 			// if lifes are down to zero then clear game area
 		if ( self.lifes <= 0  ) {
 			end_game("Game ended, you lost!");
@@ -383,7 +389,7 @@ JSSnake.prototype.startGame = function() {
 		paint_options(optionc.x/6, optionc.y/6, optionc.answer);
 		paint_options(optiond.x/6, optiond.y/6, optiond.answer);
 		
-		// Lets make the snake to grow automatically
+		// Lets make the snake grow automatically
 		growinterval--;
 		if (growinterval <= 0) {
 			growinterval = 25
