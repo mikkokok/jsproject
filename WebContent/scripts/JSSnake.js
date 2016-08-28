@@ -174,7 +174,7 @@ JSSnake.prototype.startGame = function() {
 	var snakeX;		// x-cordinate for snake
 	var snakeY;		// y-cordinate for snake
 	var interval = 80; // defines game speed, smaller number is faster
-	var growinterval = 50; // defines how often snake will grow 
+	var growinterval = 25; // defines how often snake will grow 
 	
 	
 	
@@ -350,7 +350,7 @@ JSSnake.prototype.startGame = function() {
 			};
 			create_options();
 			// Reduce the length of the snake (pop the tail X times)
-			for (var i = 0; i < 2; i++) {
+			for (var i = 0; i < 4; i++) {
 				tail = snake.pop();
 			} // for
 			tail.x = snakeX; tail.y = snakeY;
@@ -375,9 +375,10 @@ JSSnake.prototype.startGame = function() {
 		growinterval--;
 		console.log(growinterval);
 		if (growinterval <= 0) {
-			growinterval = 50
-			tail = snake.push();
-			tail.x = snakeX; tail.y = snakeY;
+			growinterval = 25
+			snake.push({x: 0,
+						y: 0
+						});
 		} // if
 		
 		// Last but not least paint the amount of lifes
