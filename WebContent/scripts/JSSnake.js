@@ -1,7 +1,7 @@
 // Constructor for JSSNake. If you rename this, you need to rename it also in init.js
 // Take options object as a parameters. Given options override defaults
 JSSnake = function(options) {
-	console.log("constructor");
+	//console.log("constructor");
 	// Make this object visible in functions.
 	var self = this; 
 
@@ -65,16 +65,16 @@ JSSnake = function(options) {
 
 //Starting point for the game
 JSSnake.prototype.start = function() {
-	console.log("JSSnake.prototype.start");
+	//console.log("JSSnake.prototype.start");
 	var self = this; 
 
 	self.drawGameArea();
-	console.log("Game area has been drawn");
+	//console.log("Game area has been drawn");
 	self.startGame();
 
 } // start function
 JSSnake.prototype.drawGameArea = function() {
-	console.log("JSSnake.prototype.drawGameArea");
+	//console.log("JSSnake.prototype.drawGameArea");
 	var self = this;
 	
 	// div elements for the snake game and its parts
@@ -89,7 +89,7 @@ JSSnake.prototype.drawGameArea = function() {
 	
 } // drawGameArea function
 JSSnake.prototype.startGame = function() {
-	console.log("JSSnake.prototype.startGame");
+	//console.log("JSSnake.prototype.startGame");
 	var self = this;
 	
 	// ######################### Draw necessary things #########################
@@ -415,7 +415,7 @@ JSSnake.prototype.startGame = function() {
 // Game starts only after user has decide to start the game. 
 // You can skip this, if you like.
 JSSnake.prototype.drawStartScreen = function() {
-	console.log("JSSnake.prototype.drawStartScreen");
+	//console.log("JSSnake.prototype.drawStartScreen");
 	var self = this; 
 
 	self.parent.append('<div class="startbutton">Start!</div>'); 
@@ -451,7 +451,7 @@ JSSnake.prototype.drawStartScreen = function() {
 // No need to modify this, unless you want to implement themes or 
 // load external css-libraries
 JSSnake.prototype.loadCss = function() {
-	console.log("JSSnake.prototype.loadCss");
+	//console.log("JSSnake.prototype.loadCss");
 	var self = this;
 	// remove all existing stylesheets (should not be any)
 	$("[id^=boilerpalte-style]").remove();
@@ -493,7 +493,7 @@ JSSnake.prototype.loadCss = function() {
 
 // Keep the game in fullscreen even on window resize
 JSSnake.prototype.resize = function() {
-	console.log("JSSnake.prototype.resize");
+	//console.log("JSSnake.prototype.resize");
 	var self = this;
 	// First make sure that the outer most element is full width and height
 	$(self.options.parent).width(parseFloat($(window).width()) - parseFloat($(self.options.parent).offset().left) + 'px');
