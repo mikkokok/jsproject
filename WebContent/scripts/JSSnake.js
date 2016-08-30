@@ -78,9 +78,9 @@ JSSnake.prototype.drawGameArea = function() {
 	var self = this;
 	
 	// div elements for the snake game and its parts
-	self.parent.append($('<div class="snakeScreen" id="screencanvas"></div>'));
-	self.parent.append($('<div class="questioncanvas" id="questioncanvas"></div>'));
-	self.parent.append($('<div class="lifescanvas" id="lifescanvas"></div>'));
+	self.parent.append($('<div class="snake" id="screencanvas"></div>'));
+	self.parent.append($('<div class="snake" id="questioncanvas"></div>'));
+	self.parent.append($('<div class="snake" id="lifescanvas"></div>'));
 
 	// Lets create three different canvas for future use
 	jQuery('#screencanvas').append('<canvas id="screen" height="800" width=1400> </canvas>'); 
@@ -99,7 +99,7 @@ JSSnake.prototype.startGame = function() {
 	var ctx = screen.getContext("2d");
 	var w = $("#screen").width();
 	var h = $("#screen").height();
-	
+	// $("#lifes").width()
 	var question = $("#question")[0];
     var qctx = question.getContext("2d");
     var lifes = $("#lifes")[0];
@@ -126,30 +126,30 @@ JSSnake.prototype.startGame = function() {
 
 	// Function to paint question
 	function paint_question(question) {
-		qctx.clearRect(0, 0, 1400, 60); // x,y, width, height // clears the old question before painting new
+		qctx.clearRect(0, 0, $("#question").width(), $("#question").height()); // x,y, width, height // clears the old question before painting new
 		qctx.fillStyle = "red";
 	    qctx.font = "30px 'Comic Sans MS'";
 	    qctx.textAlign = "left";
-	    qctx.fillText("Question: "+question, 10, 50);	
+	    qctx.fillText("Question: "+question, $("#question").width()/snakesize, $("#question").height()-snakesize);	
 	} // paint_question
 	
     // Function to paint amount of lifes
     function paint_lifes() {
-    	lctx.clearRect(0, 0, 1400, 60); // x,y, width, height // clears the old life number
+    	lctx.clearRect(0, 0, $("#lifes").width(), $("#lifes").height()); // x,y, width, height // clears the old life number
     	lctx.fillStyle = "red";
     	lctx.font = "30px 'Comic Sans MS'";
     	lctx.textAlign = "left";
-    	lctx.fillText("Lifes: "+self.lifes, 10, 50);
+    	lctx.fillText("Lifes: "+self.lifes, $("#lifes").width()/snakesize, $("#lifes").height()-snakesize);
     } // paint_life
     	
-	// Function to end game 
+	// Function to end game i.e paint screen with different text 
 	function end_game (text) {
 		ctx.fillStyle = 'red';
 		ctx.font = "30px 'Comic Sans MS'";
 		ctx.textAlign = "left";
-		ctx.fillText(text, 140, 70); // text, x, y
-		
+		ctx.fillText(text, w/2, h/2); // text, x, y
 	} // end_game
+
 	
     // ######################### End of drawing #########################
     
@@ -223,8 +223,8 @@ JSSnake.prototype.startGame = function() {
 		// Create four different options to get four options for collecting
 		do_the_math(); // first calculate question and answer
 		optiona = {
-				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1,
+				x: Math.round(Math.random()*(w/snakesize-10))+5,
+				y: Math.round(Math.random()*(h/snakesize-10))+5,
 				answer: correctanswer,
 				
 			} // optiona
@@ -239,8 +239,8 @@ JSSnake.prototype.startGame = function() {
             } // if
         } // for
 		optionb = {
-				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1,
+				x: Math.round(Math.random()*(w/snakesize-10))+5,
+				y: Math.round(Math.random()*(h/snakesize-10))+5,
 				answer: Math.round(Math.random()*200)+1,
 				
 			} // optionb
@@ -259,8 +259,8 @@ JSSnake.prototype.startGame = function() {
              
 		} // for
 		optionc = {
-				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1,
+				x: Math.round(Math.random()*(w/snakesize-10))+5,
+				y: Math.round(Math.random()*(h/snakesize-10))+5,
 				answer: Math.round(Math.random()*200)+1,
 			} // optionc
 		if (optionc.answer == optiona.answer) {
@@ -277,8 +277,8 @@ JSSnake.prototype.startGame = function() {
             } // if
 		} // for
 		optiond = {
-				x: Math.round(Math.random()*130)+1,
-				y: Math.round(Math.random()*70)+1, 
+				x: Math.round(Math.random()*(w/snakesize-10))+5,
+				y: Math.round(Math.random()*(h/snakesize-10))+5, 
 				answer: Math.round(Math.random()*200)+1,
 			} // optiond
 		if (optiond.answer == optiona.answer) {
@@ -298,6 +298,8 @@ JSSnake.prototype.startGame = function() {
 	
 	// Function to create the question and correct answer
 	function do_the_math() {
+		
+		
 		questiona = Math.round(Math.random()*200)+1;
 		questionb = Math.round(Math.random()*200)+1
 		correctanswer = questiona+questionb;
@@ -313,9 +315,10 @@ JSSnake.prototype.startGame = function() {
 		// The actual space for playing. Colored as white
 		ctx.fillStyle = "white";
 		ctx.fillRect(0, 0, w, h);
-		// This white space has black borders
-		ctx.strokeStyle = "black";
+		// Game area has pink borders acting as walls
+		ctx.strokeStyle = "#ff00ff";
 		ctx.strokeRect(0, 0, w, h);
+
 		
 		// Snake head cordinates to easier usable variables
 		snakeX = snake[0].x;
