@@ -78,9 +78,9 @@ JSSnake.prototype.drawGameArea = function() {
 	var self = this;
 	
 	// div elements for the snake game and its parts
-	self.parent.append($('<div class="snake" id="screencanvas"></div>'));
-	self.parent.append($('<div class="snake" id="questioncanvas"></div>'));
-	self.parent.append($('<div class="snake" id="lifescanvas"></div>'));
+	self.parent.append($('<div class="divsnake" id="screencanvas"></div>'));
+	self.parent.append($('<div class="divquestion" id="questioncanvas"></div>'));
+	self.parent.append($('<div class="divlifes" id="lifescanvas"></div>'));
 
 	// Lets create three different canvas for future use
 	jQuery('#screencanvas').append('<canvas id="screen" height="800" width=1400> </canvas>'); 
