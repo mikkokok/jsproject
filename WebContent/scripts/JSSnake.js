@@ -24,6 +24,7 @@ JSSnake = function(options) {
 	self.sendAnswer = self.options.sendAnswer; 
 	self.lifes = self.options.lifes;
 	self.nOfOptions = self.options.nOfOptions;
+	self.difficulty = self.options.difficulty;
 
 	// Create a container for the game. 
 	// There needs to be a "gamearea"-container, which is positioned relative and takes the 
@@ -175,13 +176,33 @@ JSSnake.prototype.startGame = function() {
 	var score = 0; // Start from zero
 	var snakeX;		// x-cordinate for snake
 	var snakeY;		// y-cordinate for snake
-	var interval = 80; // defines game speed, smaller number is faster
-	var growinterval = 25; // defines how often snake will grow 
 	var correctanswer;  // variable for answer
+	var interval = 80; // defines game speed, smaller number is faster
+	var growinterval = 25; // defines how often snake will grow
+	var origgrowinterval = 25; // Original growing interval
 	var questiona; // first variable for question
 	var questionb; // second variable for question
+	var maxnumber = 10; // defines the highest number for creating questions
+	var maxmath = 2; // defines available math operation (two includes subtraction and addition, three includes the before mentioned two but also multiplication)
+	var chosenmath = 2; // which operation it is 
 	
-	
+	// Lets check the defined difficulty for set of variables and define them accordingly
+	if (self.difficulty == "easy") { // Set variables for easy game
+		var interval = 80; // defines game speed, smaller number is faster
+		var origgrowinterval = 25; // defines how often snake will grow
+		var maxnumber = 50; // defines the highest number for creating questions
+	}
+	if (self.difficulty == "normal") { // Set variables for normal game
+		var interval = 60; // defines game speed, smaller number is faster
+		var origgrowinterval = 15; // defines how often snake will grow
+		var maxnumber = 100; // defines the highest number for creating questions
+	} 
+	if (self.difficulty == "hard") { // Set variables for hard game
+		var interval = 40; 
+		var origgrowinterval = 5; 
+		var maxnumber = 400; 
+		var maxmath = 3;
+	} 
 	
 	// Init function to start the game
 	function init()	{
@@ -225,7 +246,7 @@ JSSnake.prototype.startGame = function() {
 		optiona = {
 				x: Math.round(Math.random()*(w/snakesize-10))+5,
 				y: Math.round(Math.random()*(h/snakesize-10))+5,
-				answer: correctanswer,
+				answer: correctanswer
 				
 			} // optiona
 		// Check that option is not created on top of snake and if it is then re-create it
@@ -241,7 +262,7 @@ JSSnake.prototype.startGame = function() {
 		optionb = {
 				x: Math.round(Math.random()*(w/snakesize-10))+5,
 				y: Math.round(Math.random()*(h/snakesize-10))+5,
-				answer: Math.round(Math.random()*200)+1,
+				answer: Math.round(Math.random()*correctanswer)+Math.round(correctanswer/2),
 				
 			} // optionb
 		if (optionb.answer == optiona.answer) {
@@ -261,7 +282,7 @@ JSSnake.prototype.startGame = function() {
 		optionc = {
 				x: Math.round(Math.random()*(w/snakesize-10))+5,
 				y: Math.round(Math.random()*(h/snakesize-10))+5,
-				answer: Math.round(Math.random()*200)+1,
+				answer: Math.round(Math.random()*correctanswer)+Math.round(correctanswer/2),
 			} // optionc
 		if (optionc.answer == optiona.answer) {
 	       	 optionc.answer = Math.round(Math.random()*20)+1;
@@ -279,7 +300,7 @@ JSSnake.prototype.startGame = function() {
 		optiond = {
 				x: Math.round(Math.random()*(w/snakesize-10))+5,
 				y: Math.round(Math.random()*(h/snakesize-10))+5, 
-				answer: Math.round(Math.random()*200)+1,
+				answer: Math.round(Math.random()*correctanswer)+Math.round(correctanswer/2),
 			} // optiond
 		if (optiond.answer == optiona.answer) {
 	       	 optiond.answer = Math.round(Math.random()*20)+1;
@@ -298,12 +319,30 @@ JSSnake.prototype.startGame = function() {
 	
 	// Function to create the question and correct answer
 	function do_the_math() {
-		
-		
-		questiona = Math.round(Math.random()*200)+1;
-		questionb = Math.round(Math.random()*200)+1
-		correctanswer = questiona+questionb;
-		paint_question(questiona+" + "+questionb);
+		// First generate the possible question
+		chosenmath = Math.round(Math.random()*maxmath)+1 // operation number between 1 and 4
+		console.log("chosenmath: "+chosenmath);
+		questiona = Math.round(Math.random()*maxnumber)+1; // create number between 1 and maxnumber
+		questionb = Math.round(Math.random()*maxnumber)+1
+		if (chosenmath == 1) { // Lets do some addition
+			correctanswer = questiona+questionb;
+			paint_question(questiona+" + "+questionb);
+		}
+		if (chosenmath == 2) { // Lets do some subtraction
+			if (questiona < questionb) { // Lets make sure we don't get negative answers
+				correctanswer = questionb-questiona;
+				paint_question(questionb+" - "+questiona);
+			} else {
+			correctanswer = questiona-questionb;
+			paint_question(questiona+" - "+questionb);
+			} // if-else
+		}
+		if (chosenmath == 3) { // Lets do some multiplication
+			questiona = Math.round(Math.random()*10)+1; // In case of multiplication numbers are always between 10 and 1 
+			questionb = Math.round(Math.random()*10)+1  // to make things much easier
+			correctanswer = questiona*questionb;
+			paint_question(questiona+" * "+questionb);
+		}
 	}
 	
 	// ######################### End of help functions #########################
@@ -395,7 +434,7 @@ JSSnake.prototype.startGame = function() {
 		// Lets make the snake grow automatically
 		growinterval--;
 		if (growinterval <= 0) {
-			growinterval = 25
+			growinterval = origgrowinterval
 			snake.push({x: 0,
 						y: 0
 						});
