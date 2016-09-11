@@ -321,7 +321,6 @@ JSSnake.prototype.startGame = function() {
 	function do_the_math() {
 		// First generate the possible question
 		chosenmath = Math.round(Math.random()*maxmath)+1 // operation number between 1 and 4
-		console.log("chosenmath: "+chosenmath);
 		questiona = Math.round(Math.random()*maxnumber)+1; // create number between 1 and maxnumber
 		questionb = Math.round(Math.random()*maxnumber)+1
 		if (chosenmath == 1) { // Lets do some addition
